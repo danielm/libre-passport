@@ -15,6 +15,8 @@ async function bootstrap() {
     new FastifyAdapter()
   );
 
+  app.enableCors();
+
   await app.register(helmet);
   await app.register(compression, { encodings: ['gzip', 'deflate'] });
 
