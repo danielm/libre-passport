@@ -6,12 +6,17 @@ import {
 import { AppModule } from './app/app.module';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import helmet from '@fastify/helmet';
+import compression from '@fastify/compress';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter()
   );
+
+  await app.register(helmet);
+  await app.register(compression, { encodings: ['gzip', 'deflate'] });
 
   const configService = app.get(ConfigService);
   const host = configService.get<string>('API_HOST');
