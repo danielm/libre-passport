@@ -9,13 +9,27 @@ import {
   ParseUUIDPipe,
   HttpStatus,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
-import { ApiAcceptedResponse, ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  ApiAcceptedResponse,
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse
+} from '@nestjs/swagger';
 import { ApplicationRepository } from './application.repository';
 import { Application } from './application.entity';
 import { ApiException } from 'api/src/exceptions/ApiException';
+import { PaginationQueryDto } from 'api/src/utils/pagination-query.dto';
+import { PaginatedResponse } from 'api/src/utils/paginated-response';
+import { ApiOkPaginatedResponse } from 'api/src/decorators/api-ok-paginated-response';
 
 @Controller('applications')
 @ApiTags('Applications')
@@ -26,9 +40,14 @@ export class ApplicationController {
   constructor(private readonly applicationRepository: ApplicationRepository) {}
 
   @Get()
-  @ApiOkResponse({ type: Application, isArray: true })
-  findAll() {
-    return this.applicationRepository.findAll();
+  @ApiOkPaginatedResponse(Application)
+  async findAll(
+    @Query() paginationQuery: PaginationQueryDto
+  ): Promise<PaginatedResponse<Application>> {
+    return this.applicationRepository.findAllPaginated(
+      paginationQuery.page,
+      paginationQuery.limit
+    );
   }
 
   @Get(':id')

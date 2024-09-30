@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Application } from './application.entity';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
+import { PaginatedResponse } from 'api/src/utils/paginated-response';
 
 @Injectable()
 export class ApplicationRepository {
@@ -14,6 +15,27 @@ export class ApplicationRepository {
 
   findAll(): Promise<Application[]> {
     return this.applicationsRepository.find();
+  }
+
+  async findAllPaginated(
+    page: number = 1,
+    limit: number = 10,
+    options: FindManyOptions<Application> = {}
+  ): Promise<PaginatedResponse<Application>> {
+    const offset = (page - 1) * limit;
+    const [data, total] = await this.applicationsRepository.findAndCount({
+      ...options,
+      skip: offset,
+      take: limit,
+    });
+
+    if (data.length === 0 && (page > 1)) {
+      throw new NotFoundException('No results on page');
+    }
+
+    const pages = Math.ceil(total / limit);
+
+    return { data, total, page, limit, pages };
   }
 
   findOne(id: string): Promise<Application | null> {
