@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import helmet from '@fastify/helmet';
 import compression from '@fastify/compress';
 import { EntityNotFoundExceptionFilter } from './filters/entity-not-found-exception.filter';
+import { setupSwagger } from './utils/setup-swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -41,6 +42,12 @@ async function bootstrap() {
   const prefix = configService.get<string>('API_PREFIX');
 
   app.setGlobalPrefix(prefix);
+
+  // Documentation
+  if (env !== 'production') {
+    setupSwagger(app);
+  }
+
   await app.listen(port, host);
 
   Logger.log(

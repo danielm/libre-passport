@@ -3,8 +3,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configSchema from './app.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { DataAccessApplicationModule } from '@libre-passport/data-access-application';
-// import { Application } from 'libs/data-access-application/src/lib/application.entity';
+import { ApplicationModule } from './applications/application.module';
+import { Application } from './applications/application.entity';
 
 @Module({
   imports: [
@@ -23,13 +23,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: configService.getOrThrow('POSTGRES_USER'),
         password: configService.getOrThrow('POSTGRES_PASSWORD'),
         database: configService.getOrThrow('POSTGRES_DATABASE'),
-        synchronize: false,
+        synchronize: true,
         logging: configService.get('POSTGRES_LOGGING', false),
-        entities: [/*Application*/],
+        entities: [Application],
       }),
       inject: [ConfigService],
     }),
-    // DataAccessApplicationModule,
+    ApplicationModule,
   ],
   controllers: [],
   providers: [],
