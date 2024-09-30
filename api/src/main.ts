@@ -1,13 +1,14 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { AppModule } from './app/app.module';
-import { Logger } from '@nestjs/common';
+import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from '@fastify/helmet';
 import compression from '@fastify/compress';
+import { EntityNotFoundExceptionFilter } from './filters/entity-not-found-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -16,6 +17,19 @@ async function bootstrap() {
   );
 
   app.enableCors();
+
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true, // Automatically transform payloads to their DTO classes
+    /*disableErrorMessages: true, ToDo: production only */
+    whitelist: true, // Strip any non-whitelisted properties from the input object
+    forbidNonWhitelisted: true, //Throw an error if a non-whitelisted property is present in the input object
+    /*transformOptions: {
+      enableImplicitConversion: true
+    },*/
+  }));
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalFilters(new EntityNotFoundExceptionFilter());
 
   await app.register(helmet);
   await app.register(compression, { encodings: ['gzip', 'deflate'] });

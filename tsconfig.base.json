@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@libre-passport/data-access-application": [
+        "libs/data-access-application/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

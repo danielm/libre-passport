@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configSchema from './app.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+// import { DataAccessApplicationModule } from '@libre-passport/data-access-application';
+// import { Application } from 'libs/data-access-application/src/lib/application.entity';
 
 @Module({
   imports: [
@@ -25,12 +25,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         database: configService.getOrThrow('POSTGRES_DATABASE'),
         synchronize: false,
         logging: configService.get('POSTGRES_LOGGING', false),
-        // entities: [Application],
+        entities: [/*Application*/],
       }),
       inject: [ConfigService],
     }),
+    // DataAccessApplicationModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
