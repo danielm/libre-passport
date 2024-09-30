@@ -5,6 +5,7 @@ import configSchema from './app.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApplicationModule } from './applications/application.module';
 import { Application } from './applications/application.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { Application } from './applications/application.entity';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
     ApplicationModule,
   ],
   controllers: [],
