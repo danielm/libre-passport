@@ -21,6 +21,7 @@ import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiTags,
   ApiUnauthorizedResponse
 } from '@nestjs/swagger';
@@ -40,6 +41,7 @@ export class ApplicationController {
   constructor(private readonly applicationRepository: ApplicationRepository) {}
 
   @Get()
+  @ApiOperation({ summary: 'Returns a paginated list of Applications' })
   @ApiOkPaginatedResponse(Application)
   async findAll(
     @Query() paginationQuery: PaginationQueryDto
@@ -51,6 +53,7 @@ export class ApplicationController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Returns a single Application details' })
   @ApiOkResponse({ type: Application })
   @ApiNotFoundResponse( { description: 'Application not found' })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -58,6 +61,7 @@ export class ApplicationController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Creates a new Application' })
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({ type: Application })
   create(@Body() createApplicationDto: CreateApplicationDto) {
@@ -65,6 +69,7 @@ export class ApplicationController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Updates an Application' })
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiNotFoundResponse( { description: 'Application not found' })
   @ApiAcceptedResponse({ description: 'Application updated'})
@@ -76,6 +81,7 @@ export class ApplicationController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Deletes an Application' })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNotFoundResponse( { description: 'Application not found' })
   @ApiNoContentResponse({ description: 'Application removed'})

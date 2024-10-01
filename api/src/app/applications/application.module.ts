@@ -8,7 +8,7 @@ import { ApplicationController } from './application.controller';
   imports: [TypeOrmModule.forFeature([Application])],
   providers: [ApplicationRepository],
   controllers: [ApplicationController],
-  exports: [ApplicationRepository/*, TypeOrmModule*/],
+  exports: [ApplicationRepository],
 })
 export class ApplicationModule {}
 

@@ -6,6 +6,7 @@ export function setupSwagger(app: INestApplication): void {
     .setTitle('LibrePassport API')
     .setDescription('Free and Open Source Identity and Access Management Solution')
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

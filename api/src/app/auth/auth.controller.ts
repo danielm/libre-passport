@@ -5,17 +5,21 @@ import {
     Body,
     Param,
     ParseUUIDPipe,
+    UseGuards,
   } from '@nestjs/common';
-  import { ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+  import { ApiBadRequestResponse, ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RegisterDto } from './dto/register.dto';
 import { ForgotDto } from './dto/forgot.dto';
 import { LoginDto } from './dto/login.dto';
 import { ApiException } from 'api/src/exceptions/ApiException';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { AnswerInviteDto } from './dto/answer-invite.dto';
+import { ApplicationGuard } from '../application.guard';
 
 @Controller('auth')
+@UseGuards(ApplicationGuard)
 @ApiTags('Authentication')
+@ApiBearerAuth()
 @ApiBadRequestResponse({ description: 'Bad request, most likely a validation problem.', type: ApiException })
 export class AuthController {
     constructor() {}
