@@ -8,8 +8,10 @@ import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/comm
 import { ConfigService } from '@nestjs/config';
 import helmet from '@fastify/helmet';
 import compression from '@fastify/compress';
-import { EntityNotFoundExceptionFilter } from './filters/entity-not-found-exception.filter';
-import { setupSwagger } from './utils/setup-swagger';
+import {
+  EntityExceptionFilter,
+  setupSwagger,
+} from '@libre-passport/api-common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -30,7 +32,7 @@ async function bootstrap() {
   }));
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  app.useGlobalFilters(new EntityNotFoundExceptionFilter());
+  app.useGlobalFilters(new EntityExceptionFilter());
 
   await app.register(helmet);
   await app.register(compression, { encodings: ['gzip', 'deflate'] });

@@ -10,6 +10,7 @@ import {
   HttpStatus,
   HttpCode,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
@@ -27,12 +28,16 @@ import {
 } from '@nestjs/swagger';
 import { ApplicationRepository } from './application.repository';
 import { Application } from './application.entity';
-import { ApiException } from 'api/src/exceptions/ApiException';
-import { PaginationQueryDto } from 'api/src/utils/pagination-query.dto';
-import { PaginatedResponse } from 'api/src/utils/paginated-response';
-import { ApiOkPaginatedResponse } from 'api/src/decorators/api-ok-paginated-response';
+import {
+  ApiException,
+  ApiOkPaginatedResponse,
+  PaginatedResponse,
+  PaginationQueryDto,
+} from '@libre-passport/api-common';
+import { ApplicationGuard } from '../application.guard';
 
 @Controller('applications')
+@UseGuards(ApplicationGuard)
 @ApiTags('Applications')
 @ApiForbiddenResponse({ description: 'Forbidden.' })
 @ApiUnauthorizedResponse({ description: 'Unauthorized' })

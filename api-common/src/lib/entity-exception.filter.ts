@@ -2,7 +2,7 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus, Logger } from '@nest
 import { EntityNotFoundError } from 'typeorm';
 
 @Catch(EntityNotFoundError)
-export class EntityNotFoundExceptionFilter implements ExceptionFilter {
+export class EntityExceptionFilter implements ExceptionFilter {
   catch(exception: EntityNotFoundError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -12,6 +12,6 @@ export class EntityNotFoundExceptionFilter implements ExceptionFilter {
       message: "Entity Not Found",//exception.message,
     });
 
-    Logger.error(exception.message, 'EntityNotFoundExceptionFilter');
+    Logger.error(exception.message, 'EntityExceptionFilter');
   }
 }

@@ -11,10 +11,10 @@ import {
 import { RegisterDto } from './dto/register.dto';
 import { ForgotDto } from './dto/forgot.dto';
 import { LoginDto } from './dto/login.dto';
-import { ApiException } from 'api/src/exceptions/ApiException';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { AnswerInviteDto } from './dto/answer-invite.dto';
 import { ApplicationGuard } from '../application.guard';
+import { ApiException } from '@libre-passport/api-common';
 
 @Controller('auth')
 @UseGuards(ApplicationGuard)
@@ -22,8 +22,6 @@ import { ApplicationGuard } from '../application.guard';
 @ApiBearerAuth()
 @ApiBadRequestResponse({ description: 'Bad request, most likely a validation problem.', type: ApiException })
 export class AuthController {
-    constructor() {}
-
     @Post('login')
     @ApiOperation({ summary: 'Sign in an user' })
     @ApiOkResponse()

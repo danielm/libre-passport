@@ -4,7 +4,7 @@ import { FindManyOptions, Repository } from 'typeorm';
 import { Application } from './application.entity';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
-import { PaginatedResponse } from 'api/src/utils/paginated-response';
+import { PaginatedResponse } from '@libre-passport/api-common';
 
 @Injectable()
 export class ApplicationRepository {
@@ -18,8 +18,8 @@ export class ApplicationRepository {
   }
 
   async findAllPaginated(
-    page: number = 1,
-    limit: number = 10,
+    page = 1,
+    limit = 10,
     options: FindManyOptions<Application> = {}
   ): Promise<PaginatedResponse<Application>> {
     const offset = (page - 1) * limit;
@@ -55,9 +55,9 @@ export class ApplicationRepository {
   }
 
   async update(id: string, updateApplicationDto: UpdateApplicationDto) {
-    let app = await this.applicationsRepository.findOneByOrFail({ id });
+    const app = await this.applicationsRepository.findOneByOrFail({ id });
 
-    let result = await this.applicationsRepository.update(app.id, updateApplicationDto);
+    const result = await this.applicationsRepository.update(app.id, updateApplicationDto);
 
     if (result.affected === 0) {
       throw new NotFoundException(`Failed to update Application`);
@@ -65,9 +65,9 @@ export class ApplicationRepository {
   }
 
   async remove(id: string) {
-    let app = await this.applicationsRepository.findOneByOrFail({ id });
+    const app = await this.applicationsRepository.findOneByOrFail({ id });
 
-    let result = await this.applicationsRepository.softDelete(app.id);
+    const result = await this.applicationsRepository.softDelete(app.id);
 
     if (result.affected === 0) {
       throw new NotFoundException(`Failed to remove Application`);

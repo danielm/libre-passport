@@ -10,7 +10,10 @@ import { ApplicationRepository } from './applications/application.repository';
 
 @Injectable()
 export class ApplicationGuard implements CanActivate {
-  constructor(private applicationRepository: ApplicationRepository) {}
+  constructor(
+    private applicationRepository: ApplicationRepository,
+    // private reflector: Reflector,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();

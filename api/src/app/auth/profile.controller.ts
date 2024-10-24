@@ -8,8 +8,8 @@ import {
   } from '@nestjs/common';
   import { ApiBadRequestResponse, ApiBearerAuth, ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ApiException } from 'api/src/exceptions/ApiException';
 import { ApplicationGuard } from '../application.guard';
+import { ApiException } from '@libre-passport/api-common';
 
 @Controller('profile')
 @UseGuards(ApplicationGuard)
@@ -18,8 +18,6 @@ import { ApplicationGuard } from '../application.guard';
 @ApiForbiddenResponse({ description: 'Forbidden.' })
 @ApiBadRequestResponse({ description: 'Bad request, most likely a validation problem.', type: ApiException })
 export class ProfileController {
-  constructor() {}
-
   @Get()
   @ApiOkResponse()
   @ApiOperation({ summary: 'Return current user\'s information' })

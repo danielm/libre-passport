@@ -22,6 +22,10 @@ export class Application {
   @ApiProperty()
   name: string;
 
+  @Column({ type: 'json', default: ["auth", "applications", "users"] })
+  @ApiProperty()
+  scope: string[];
+
   @Column({ default: true })
   @ApiProperty()
   enabled?: boolean;
